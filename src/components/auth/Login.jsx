@@ -2,10 +2,10 @@ import React, { useState } from "react"
 import { Link } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
 import "./Login.css"
-import { getUserByEmail } from "../../services/userService"
+import { getUserByEmail } from "../../services/userServices"
 
 export const Login = () => {
-  const [email, set] = useState("hpassfield7@netvibes.com")
+  const [email, set] = useState("")
   const navigate = useNavigate()
 
   const handleLogin = (e) => {
@@ -33,7 +33,7 @@ export const Login = () => {
     <main className="container-login">
       <section>
         <form className="form-login" onSubmit={handleLogin}>
-          <h1>Honey Rae Repairs</h1>
+          <h1>Magi Nation Members</h1>
           <h2>Please sign in</h2>
           <fieldset>
             <div className="form-group">

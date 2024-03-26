@@ -1,26 +1,38 @@
-import { useState } from "react"
+import React,{ useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { v4 as uuidv4} from 'uuid'
 import "./Login.css"
-import { createUser, getUserByEmail } from "../../services/userService"
+import { createUser,getUserByEmail, createDeck } from "../../services/userServices"
 
 export const Register = (props) => {
   const [customer, setCustomer] = useState({
     email: "",
     fullName: "",
-    isStaff: false,
   })
   let navigate = useNavigate()
 
   const registerNewUser = () => {
-    createUser(customer).then((createdUser) => {
+
+    const deckId = uuidv4();
+
+    const newDeck = {
+      id: deckId,
+      name: "User Deck", 
+      cardId: [], 
+    };
+
+
+    Promise.all([
+      createUser({ ...customer, decksId: [deckId] }), 
+      createDeck(newDeck), 
+    ]).then(([createdUser, createdDeck]) => {
       if (createdUser.hasOwnProperty("id")) {
         localStorage.setItem(
-          "honey_user",
+          "user",
           JSON.stringify({
             id: createdUser.id,
-            staff: createdUser.isStaff,
           })
-        )
+        );
 
         navigate("/")
       }
@@ -49,7 +61,7 @@ export const Register = (props) => {
   return (
     <main style={{ textAlign: "center" }}>
       <form className="form-login" onSubmit={handleRegister}>
-        <h1>Honey Rae Repairs</h1>
+        <h1>Magi Nation Members</h1>
         <h2>Please Register</h2>
         <fieldset>
           <div className="form-group">
@@ -74,22 +86,6 @@ export const Register = (props) => {
               placeholder="Email address"
               required
             />
-          </div>
-        </fieldset>
-        <fieldset>
-          <div className="form-group">
-            <label>
-              <input
-                onChange={(evt) => {
-                  const copy = { ...customer }
-                  copy.isStaff = evt.target.checked
-                  setCustomer(copy)
-                }}
-                type="checkbox"
-                id="isStaff"
-              />
-              I am an employee{" "}
-            </label>
           </div>
         </fieldset>
         <fieldset>

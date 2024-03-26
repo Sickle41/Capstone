@@ -1,0 +1,43 @@
+.add-card-container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .add-card-container h2 {
+    margin-bottom: 20px;
+  }
+  
+  .add-card-container form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .add-card-container label {
+    margin-bottom: 5px;
+  }
+  
+  .add-card-container input[type="text"],
+  .add-card-container select {
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .add-card-container button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .add-card-container button:hover {
+    background-color: #0056b3;
+  }
+  

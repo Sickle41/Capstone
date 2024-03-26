@@ -17,3 +17,16 @@ export const createUser = (customer) => {
         body: JSON.stringify(customer),
     }).then((res) => res.json())
 }
+
+export const createDeck = (deck) => {
+    return fetch(`http://localhost:8088/decks`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(deck),
+    }).then((res) => res.json());
+  };
+
+
+  
