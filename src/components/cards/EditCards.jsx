@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { getCardById,updateCard } from '../../services/deckServices';
+import { getCardById,updateCard } from '../../services/cardServices';
 
 export const EditCard = () => {
   const { cardId } = useParams();

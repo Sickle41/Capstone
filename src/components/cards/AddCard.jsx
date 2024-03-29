@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { createCard,updateDeck } from '../../services/cardServices';
+import { updateDeck } from '../../services/createCard';
 
-export const CreateCardForm = ({ userId, deckId }) => {
+export const CreateCardForm = () => {
   const [cardData, setCardData] = useState({
     name: '',
     imageUrl: '',
@@ -14,18 +14,60 @@ export const CreateCardForm = ({ userId, deckId }) => {
     setCardData({ ...cardData, [name]: value });
   };
 
+  const handleAddCard = async (cardData) => {
+    try {
+      // Fetch the user data from local storage
+      const userData = JSON.parse(localStorage.getItem('user'));
+  
+      if (!userData || !userData.deckID) {
+        console.error('User data or deckID not found');
+        return;
+      }
+  
+      const deckID = userData.deckID;
+  
+      // Fetch the deck from the API using the correct deckID
+      const deckResponse = await fetch(`http://localhost:8088/decks/${deckID}`);
+      if (!deckResponse.ok) {
+        throw new Error('Failed to fetch deck data');
+      }
+      const deck = await deckResponse.json();
+  
+      // Add the new card to the deck's cards array
+      const updatedCards = [...deck.cards, cardData];
+  
+      // Update the deck's cards array in the database via API
+      const putResponse = await fetch(`http://localhost:8088/decks/${deckID}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ cards: updatedCards })
+      });
+      if (!putResponse.ok) {
+        throw new Error('Failed to update deck data');
+      }
+  
+      console.log('Card added to the deck successfully');
+  
+      // Optionally, you can update the UI to reflect the changes
+      // For example, you could fetch the updated deck from the API and rerender the component
+  
+    } catch (error) {
+      console.error('Error adding card:', error);
+    }
+  };
+
   const handleCreateCard = async (event) => {
     event.preventDefault();
     try {
-      const createdCard = await createCard(cardData, userId, deckId);
-      const cardId = createdCard.id;
-      const updatedDeck = await updateDeck(userId, deckId, { cardId });
-      console.log('Card created and added to the user\'s deck:', updatedDeck);
+      await handleAddCard(cardData);
+      console.log('Card created and added to the user\'s deck');
     } catch (error) {
       console.error('Error creating card and updating deck:', error);
     }
   };
-
+  
   return (
     <div>
       <h2>Create a New Card</h2>
@@ -69,4 +111,3 @@ export const CreateCardForm = ({ userId, deckId }) => {
     </div>
   );
 };
-
