@@ -57,17 +57,37 @@ export const CardGallery = () => {
     try {
       // Fetch the user data from local storage
       const userData = JSON.parse(localStorage.getItem('user'));
-      const deckID = userData.deckID; // Make sure userData.deckID is correct
+      
+      console.log('userData:', userData);
+  
+      if (!userData || !userData.deckID) {
+        console.error('User data or deckID not found');
+        return;
+      }
+  
+      const deckID = userData.deckID;
   
       // Fetch the deck from the API using the correct deckID
-      const deckResponse = await axios.get(`http://localhost:8088/decks/${deckID}`);
-      const deck = deckResponse.data;
+      const deckResponse = await fetch(`http://localhost:8088/decks/${deckID}`);
+      if (!deckResponse.ok) {
+        throw new Error('Failed to fetch deck data');
+      }
+      const deck = await deckResponse.json();
   
       // Remove the card from the deck's cards array
       const updatedCards = deck.cards.filter(card => card.cardId !== cardID);
   
       // Update the deck's cards array in the database via API
-      await axios.put(`http://localhost:8088/decks/${deckID}`, { cards: updatedCards });
+      const putResponse = await fetch(`http://localhost:8088/decks/${deckID}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ cards: updatedCards })
+      });
+      if (!putResponse.ok) {
+        throw new Error('Failed to update deck data');
+      }
   
       // Optionally, you can update the UI to reflect the changes
       // For example, you could fetch the updated deck from the API and rerender the component
@@ -75,7 +95,11 @@ export const CardGallery = () => {
     } catch (error) {
       console.error('Error removing card:', error);
     }
-  };
+};
+
+  
+  
+  
   
   const handleEditCard = (cardID) => {
     // Navigate to the edit card page with the card ID

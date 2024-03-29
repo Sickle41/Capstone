@@ -1,16 +1,17 @@
-
 import React, { useEffect, useState } from 'react';
-import { getUserByEmail } from '../../services/userServices';
 
-export const Profile = ({ userEmail }) => {
+export const Profile = () => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    // Fetch user data when the component mounts
-    getUserByEmail(userEmail)
-      .then(userData => setUser(userData))
-      .catch(error => console.error('Error fetching user data:', error));
-  }, [userEmail]); // Fetch data whenever userEmail changes
+    // Fetch user data from local storage when the component mounts
+    const userData = JSON.parse(localStorage.getItem('user'));
+    if (userData && userData.email) {
+      setUser(userData);
+    } else {
+      console.error('User data not found in local storage');
+    }
+  }, []);
 
   return (
     <div>
@@ -26,4 +27,3 @@ export const Profile = ({ userEmail }) => {
     </div>
   );
 };
-

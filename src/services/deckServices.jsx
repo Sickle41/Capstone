@@ -55,5 +55,40 @@ export const getCardById = (cardId) => {
 };
 
 
+export const updateCard = async (cardId, updatedCardData) => {
+  try {
+    // Fetch the current card data from the API
+    const response = await fetch(`http://localhost:8088/cards/${cardId}`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch card data');
+    }
+    const currentCardData = await response.json();
+
+    // Merge the updated card data with the current card data
+    const mergedCardData = { ...currentCardData, ...updatedCardData };
+
+    // Send a PUT request to update the card data
+    const putResponse = await fetch(`http://localhost:8088/cards/${cardId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(mergedCardData),
+    });
+
+    if (!putResponse.ok) {
+      throw new Error('Failed to update card data');
+    }
+
+    // Return the updated card data
+    return mergedCardData;
+  } catch (error) {
+    console.error('Error updating card data:', error);
+    throw error;
+  }
+};
+
+
+
 
   

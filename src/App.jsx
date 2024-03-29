@@ -8,6 +8,7 @@ import { NavBar } from "./components/navbar/NavBar.jsx";
 import { CreateCardForm } from "./components/cards/AddCard.jsx";
 import { Profile } from "./components/profile/Profile.jsx";
 import { CardGallery } from "./components/cards/UserCardGallery.jsx";
+import { EditCard } from "./components/cards/EditCards.jsx";
 
 
 export const App = () => {
@@ -32,6 +33,7 @@ export const App = () => {
         element={<CreateCardForm  />}
       />
       <Route path="/profile" element={<Profile />} />
+      <Route path="/edit-card/:cardId" element={<EditCard />} />
     </Route>
    </Routes>
   );

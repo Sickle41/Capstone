@@ -1,32 +1,39 @@
-import React, { useState } from "react"
-import { Link } from "react-router-dom"
-import { useNavigate } from "react-router-dom"
-import "./Login.css"
-import { getUserByEmail } from "../../services/userServices"
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import "./Login.css";
+import { getUserByEmail } from "../../services/userServices";
 
 export const Login = () => {
-  const [email, set] = useState("")
-  const navigate = useNavigate()
+  const [email, setEmail] = useState("");
+  const navigate = useNavigate();
 
   const handleLogin = (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     getUserByEmail(email).then((foundUsers) => {
       if (foundUsers.length === 1) {
-        const user = foundUsers[0]
+        const user = foundUsers[0];
+        // Assuming user has a deckID property in the response
+        const { id, deckID } = user;
+
+        // Store user ID and deck ID in local storage
         localStorage.setItem(
           "user",
           JSON.stringify({
-            id: user.id,
+            id: id,
+            deckID: user.deckID,
+            fullName: user.fullName,
+            email: user.email
           })
-        )
+        );
 
-        navigate("/")
+        navigate("/");
       } else {
-        window.alert("Invalid login")
+        window.alert("Invalid login");
       }
-    })
-  }
+    });
+  };
 
   return (
     <main className="container-login">
@@ -39,7 +46,7 @@ export const Login = () => {
               <input
                 type="email"
                 value={email}
-                onChange={(evt) => set(evt.target.value)}
+                onChange={(evt) => setEmail(evt.target.value)}
                 className="form-control"
                 placeholder="Email address"
                 required
@@ -60,5 +67,5 @@ export const Login = () => {
         <Link to="/register">Not a member yet?</Link>
       </section>
     </main>
-  )
-}
+  );
+};
