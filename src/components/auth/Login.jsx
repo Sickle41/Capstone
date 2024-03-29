@@ -18,7 +18,6 @@ export const Login = () => {
           "user",
           JSON.stringify({
             id: user.id,
-            isStaff: user.isStaff,
           })
         )
 

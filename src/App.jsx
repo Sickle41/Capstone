@@ -5,9 +5,10 @@ import { Outlet, Route, Routes } from "react-router-dom";
 import { Login } from "./components/auth/Login.jsx";
 import { Register } from "./components/auth/Register.jsx";
 import { NavBar } from "./components/navbar/NavBar.jsx";
-import { CardGallery } from "./components/cards/CardGallery.jsx";
 import { CreateCardForm } from "./components/cards/AddCard.jsx";
 import { Profile } from "./components/profile/Profile.jsx";
+import { CardGallery } from "./components/cards/UserCardGallery.jsx";
+
 
 export const App = () => {
   return (
